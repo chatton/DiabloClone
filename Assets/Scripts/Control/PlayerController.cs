@@ -29,12 +29,17 @@ namespace Control
             {
                 if (Physics.Raycast(GetMouseRay(), out RaycastHit hit))
                 {
-                    _actionScheduler.ExecuteAction(GetActionAt(hit));
+                    _actionScheduler.ExecuteAction(GetActionFor(hit));
                 }
             }
         }
 
-        private IAction GetActionAt(RaycastHit hit)
+        public void StartAttackAction(Health health)
+        {
+            _actionScheduler.ExecuteAction(new AttackAction(_attacker, health));
+        }
+
+        private IAction GetActionFor(RaycastHit hit)
         {
             // the thing we hit has health, let's attack it!
             Health health = hit.collider.GetComponent<Health>();
@@ -46,22 +51,6 @@ namespace Control
 
             return new MoveAction(_mover, hit.point);
         }
-
-        // private Vector3 GetMousePosition()
-        // {
-        //     if (Physics.Raycast(GetMouseRay(), out RaycastHit hit))
-        //     {
-        //         return hit.point;
-        //     }
-        //
-        //     return Vector3.zero;
-        // }
-        //
-        // private RaycastHit GetRaycastHit()
-        // {
-        //     Physics.Raycast(GetMouseRay(), out RaycastHit hit);
-        //     return hit;
-        // }
 
         private Ray GetMouseRay()
         {
